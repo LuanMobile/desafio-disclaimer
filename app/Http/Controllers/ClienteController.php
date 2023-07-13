@@ -20,6 +20,6 @@ class ClienteController extends Controller
 
         $newClient = Clientes::create($data);
 
-        return response()->json(['cliente' => $newClient, 201]);
+        return response()->json( $newClient, 201);
     }
 }

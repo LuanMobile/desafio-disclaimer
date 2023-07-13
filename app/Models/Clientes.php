@@ -15,4 +15,8 @@ class Clientes extends Model
         
         return $this->hasOne(Saldos::class, 'client_id');
     }
+
+    public function lancamentos() {
+        return $this->hasMany(Lancamentos::class, 'client_id');
+    }
 }

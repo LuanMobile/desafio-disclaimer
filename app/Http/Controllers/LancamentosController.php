@@ -8,19 +8,20 @@ use Illuminate\Http\Request;
 
 class LancamentosController extends Controller
 {
-    
+    //
     public function create(Request $req, $id) {
     
         $client = Clientes::find($id);
-    
-        $data = $req->validate([
-            'descricao' => 'required|string',
-            'salario' => 'required|string',
-            'valor' => 'required|numeric'
-        ]); 
-        dd($data);
-        /* $data = $client->lancamentos()->create([
-            'descricao' => ]); */
+        
+        /* $data = $req->validate([
+            'lancamentos' => 'required|array',
+            'lancamentos.*.descricao' => 'required|string',
+            'lancamentos.*.valor' => 'required|numeric'
+        ]); */
+        
+        
+        //dd($data);
+        $data = $client->lancamentos()->create([$req]);
 
         return response()->json($data, 201);
     }

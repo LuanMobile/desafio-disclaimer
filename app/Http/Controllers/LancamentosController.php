@@ -8,29 +8,24 @@ use Illuminate\Http\Request;
 
 class LancamentosController extends Controller
 {
-    
+    //
     public function create(Request $req, $id) {
     
         $client = Clientes::find($id);
-    
-        $data = $req->validate([
-            'descricao' => 'required|string',
-            'salario' => 'required|string',
-            'valor' => 'required|numeric'
-        ]); 
-        dd($data);
-        /* $data = $client->lancamentos()->create([
-            'descricao' => ]); */
+        
+        $lancamentos = $req->all();
+        
+        $data = $client->lancamentos()->create($lancamentos);
 
         return response()->json($data, 201);
     }
     
     public function store() {
     
-        $lancamentos = Lancamentos::orderBy('created_at', 'desc')->get();
-    
-        return response()->json([
-            'lancamentos:' => $lancamentos],
+        $lancamentos = Lancamentos::select('lancamentos')->orderBy('created_at', 'desc')->get();
+        //dd($lancamentos);
+        return response()->json(
+         $lancamentos,
             200);
     }
 }

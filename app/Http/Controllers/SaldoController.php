@@ -41,7 +41,7 @@ class SaldoController extends Controller
     public function store($id) {
         $client = Clientes::find($id);
 
-        $saldo = Saldos::where('id', $client->id)->first();
+        $saldo = Saldos::select('saldo')->where('id', $client->id)->first();
 
         return response()->json($saldo, 200);
     }

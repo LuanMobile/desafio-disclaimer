@@ -36,5 +36,7 @@ Route::controller(SaldoController::class)->group(function() {
 });
 
 Route::controller(LancamentosController::class)->group( function() {
+
+    Route::get('clientes/{idCliente}/lancamentos', 'store');
     Route::post('lancamentos/{idClient}/novo', 'create');
 });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ProcessLancJob;
 use App\Models\Clientes;
 use App\Models\Lancamentos;
 use Illuminate\Http\Request;
@@ -15,9 +16,9 @@ class LancamentosController extends Controller
         
         $lancamentos = $req->all();
         
-        $data = $client->lancamentos()->create($lancamentos);
+        ProcessLancJob::dispatch($id, $lancamentos)->onQueue('lancamentos');
 
-        return response()->json($data, 201);
+        return response()->json($lancamentos, 201);
     }
     
     public function sendFile(Request $req, $id) {

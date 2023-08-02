@@ -42,11 +42,17 @@ class LancamentosController extends Controller
     }
 
     public function store() {
-        
+
+        $dataLanc = Lancamentos::select('created_at')->first();
+        $data = $dataLanc->created_at;
+        $date = date('Y-m-d', strtotime($data));
+        //dd($date); 
+
         $lancamentos = Lancamentos::select('lancamentos')->orderBy('created_at', 'desc')->get();
-        //dd($lancamentos);
+
         return response()->json(
-          $lancamentos,
+            ["$date" =>
+            $lancamentos],
             200);
     }
 }

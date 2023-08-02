@@ -16,8 +16,9 @@ return new class extends Migration
         Schema::create('lancamentos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('client_id')->constrained('clientes')->onDelete('cascade');
-            $table->json('lancamentos');
+            $table->text('lancamentos')->nullable();
             $table->timestamps();
+            $table->string('file_lancamentos')->nullable();
         });
     }
 

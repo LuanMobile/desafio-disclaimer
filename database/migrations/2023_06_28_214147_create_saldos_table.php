@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->decimal('saldo', 8,2);
             $table->foreignId('client_id')->constrained('clientes')->onDelete('cascade');
-            $table->timestamp('de');
+            $table->timestamp('de')->nullable();
             $table->timestamps();
         });
     }

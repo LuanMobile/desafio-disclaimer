@@ -41,14 +41,15 @@ class LancamentosController extends Controller
         }
     }
 
-    public function store() {
+    public function store($id) {
 
+        $client = Clientes::find($id);
         $dataLanc = Lancamentos::select('created_at')->first();
         $data = $dataLanc->created_at;
         $date = date('Y-m-d', strtotime($data));
         //dd($date); 
 
-        $lancamentos = Lancamentos::select('lancamentos')->orderBy('created_at', 'desc')->get();
+        $lancamentos = Lancamentos::select('lancamentos')->where('client_id', $id)->orderBy('created_at', 'desc')->get();
 
         return response()->json(
             ["$date" =>

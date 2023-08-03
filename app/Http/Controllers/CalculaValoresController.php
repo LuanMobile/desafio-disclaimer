@@ -38,6 +38,6 @@ class CalculaValoresController extends Controller
             }
         }
 
-        return response()->json($total);
+        return $total;
     }
 }

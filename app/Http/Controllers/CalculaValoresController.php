@@ -7,9 +7,9 @@ use App\Models\Lancamentos;
 class CalculaValoresController extends Controller
 {
 
-    static function calValores() {
+    static function calValores($id) {
 
-        $valLanc = Lancamentos::all();
+        $valLanc = Lancamentos::where('client_id', $id)->get();
         $lancamentosArray = json_decode($valLanc, true);
 
         foreach ($lancamentosArray as $lancamentoA) {
@@ -23,7 +23,6 @@ class CalculaValoresController extends Controller
                     if (isset($lancamento['valor'])) {
                         // Adicionar o valor ao array de valores
                         $valores[] = $lancamento['valor'];
-                        
                     }
                 }
 
@@ -33,11 +32,9 @@ class CalculaValoresController extends Controller
                     //print_r($totalValor);
                     $collect = collect($totalValor);
                     $total = $collect->sum();
-
                 }
             }
         }
-
         return $total;
     }
 }

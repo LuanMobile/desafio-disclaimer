@@ -38,18 +38,20 @@ class SaldoController extends Controller
     public function store($id) {
 
         $client = Clientes::find($id);
-        $valorTotal = CalculaValoresController::calValores();
-
+        $valorTotal = CalculaValoresController::calValores($id);
         $possuiSaldo = Saldos::where('client_id', $id)->first();
-        $saldoAnt = $possuiSaldo->saldo;
 
-        if(!$possuiSaldo) {
+        if ($possuiSaldo) {
+
+            $saldoAnt = $possuiSaldo->saldo;
+            return response()->json(["Saldo Atual" => $saldoAnt], 200);
+        } else {
 
             $newSaldo = new Saldos();
             $newSaldo->saldo = $valorTotal;
             $client->saldos()->save($newSaldo);
-        }
 
-        return response()->json(["Saldo Atual" => $saldoAtual], 200);
+            return response()->json(["Saldo Atual" => $newSaldo], 200);
+        }
     }
 }

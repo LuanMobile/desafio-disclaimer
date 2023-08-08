@@ -42,9 +42,11 @@ class SaldoController extends Controller
         $possuiSaldo = Saldos::where('client_id', $id)->first();
 
         if ($possuiSaldo) {
+            
+            $possuiSaldo->saldo = $valorTotal;
+            $possuiSaldo->save();
 
-            $saldoAnt = $possuiSaldo->saldo;
-            return response()->json(["Saldo Atual" => $saldoAnt], 200);
+            return response()->json(["Saldo Atual" => $possuiSaldo->saldo], 200);
         } else {
 
             $newSaldo = new Saldos();

@@ -40,6 +40,7 @@ Route::controller(LancamentosController::class)->group( function() {
     Route::get('clientes/{idCliente}/lancamentos', 'store');
     Route::post('lancamentos/{idClient}/novo', 'create');
     Route::post('lancamentos/{idClient}/file', 'sendFile');
+    Route::get('lancamentos/{idClient}/download', 'download');
 });
 
 

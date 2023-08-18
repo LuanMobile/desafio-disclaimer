@@ -6,6 +6,7 @@ use App\Jobs\ProcessLancJob;
 use App\Models\Clientes;
 use App\Models\Lancamentos;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 
 class LancamentosController extends Controller
@@ -35,25 +36,14 @@ class LancamentosController extends Controller
     public function sendFile(Request $req, $id) {
 
         $client = Clientes::find($id);
-        $reqCache = Cache::get('req');
 
         if ($req->hasFile('file')) {
             $file = $req->file('file');
             $fileContent = file_get_contents($file->getRealPath());
-            
-            $Content = json_encode($fileContent);
-            $Cache = json_encode($reqCache);
 
-            //Aplicando idempotencia
-            if ($Content === $Cache) {
-
-                return response()->json(['message' => 'Esse arquivo foi enviado recentemente!']);
-            }
-
-            Cache::put('req', $file, 300);
             // Criar um novo lançamento para o cliente e salvar o conteúdo do arquivo nele
             $lancamento = new Lancamentos();
-            $lancamento->file_lancamentos = $fileContent;
+            $lancamento->file_lancamentos = $fileContent; 
             //dd($lancamento);
             $client->lancamentos()->save($lancamento);
     
@@ -69,13 +59,30 @@ class LancamentosController extends Controller
         $dataLanc = Lancamentos::select('created_at')->first();
         $data = $dataLanc->created_at;
         $date = date('Y-m-d', strtotime($data));
-        //dd($date); 
+        //dd($date);
 
-        $lancamentos = Lancamentos::select('lancamentos')->where('client_id', $id)->orderBy('created_at', 'desc')->get();
+        $lancamentos = Lancamentos::select('lancamentos')->where([
+            ['client_id', $id],
+            ['created_at', '>', Carbon::now()->subDays(90)]
+            ])->orderBy('created_at', 'desc')->get();
 
         return response()->json(
             ["$date" =>
             $lancamentos],
             200);
+    }
+
+    public function download($id) {
+
+        $client = Clientes::find($id);
+        $lancamentos = Lancamentos::select('lancamentos')->where([
+            ['client_id', $id],
+            ['created_at', '<', Carbon::now()->subDays(90)]
+            ])->orderBy('created_at', 'desc')->get();
+        
+        $fileLanc = 'lancamentos.txt';
+        $fileContent = file_put_contents($fileLanc, $lancamentos);
+
+        return response()->download($fileLanc);
     }
 }

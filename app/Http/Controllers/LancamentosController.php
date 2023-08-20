@@ -43,8 +43,7 @@ class LancamentosController extends Controller
 
             // Criar um novo lançamento para o cliente e salvar o conteúdo do arquivo nele
             $lancamento = new Lancamentos();
-            $lancamento->file_lancamentos = $fileContent; 
-            //dd($lancamento);
+            $lancamento->file_lancamentos = $fileContent;
             $client->lancamentos()->save($lancamento);
     
             return response()->json(['message' => 'Arquivo enviado e salvo com sucesso!']);
@@ -59,7 +58,6 @@ class LancamentosController extends Controller
         $dataLanc = Lancamentos::select('created_at')->first();
         $data = $dataLanc->created_at;
         $date = date('Y-m-d', strtotime($data));
-        //dd($date);
 
         $lancamentos = Lancamentos::select('lancamentos')->where([
             ['client_id', $id],

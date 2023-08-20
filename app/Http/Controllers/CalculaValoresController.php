@@ -7,7 +7,7 @@ use App\Models\Lancamentos;
 class CalculaValoresController extends Controller
 {
 
-    static function calValores($id) {
+    public function calValores($id) {
 
         $valLanc = Lancamentos::where('client_id', $id)->get();
         $lancamentosArray = json_decode($valLanc, true);

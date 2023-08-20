@@ -7,17 +7,12 @@ use Illuminate\Http\Request;
 
 class ClienteController extends Controller
 {
-    public function saldo($id) {
-
-        
-    }
 
     public function create(Request $request) {
 
         $data = $request->validate([
             'name' => 'required|string',
         ]);
-
         $newClient = Clientes::create($data);
 
         return response()->json( $newClient, 201);
